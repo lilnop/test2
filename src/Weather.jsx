@@ -1,80 +1,68 @@
-import React, { useState, useEffect, useCallback } from "react";
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
 import { Cloud, Sun, CloudRain, Wind, Droplets, Thermometer, Loader } from 'lucide-react';
 
 const API_URL = "https://api.openweathermap.org/data/2.5/weather";
-const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-
-// Separate WeatherIcon component for better organization
-const WeatherIcon = ({ condition }) => {
-    switch (condition.toLowerCase()) {
-        case "clear":
-            return <Sun className="weather-icon sun" aria-label="Clear sky" />;
-        case 'rain':
-            return <CloudRain className="weather-icon rain" aria-label="Rain" />;
-        case 'clouds':
-            return <Cloud className="weather-icon cloud" aria-label="Cloudy" />;
-        default:
-            return <Sun className="weather-icon sun" aria-label="Default weather" />;
-    }
-};
-
-WeatherIcon.propTypes = {
-    condition: PropTypes.string.isRequired
-};
+const API_KEY = "3f2987d41aa045ec0ce9000695188865";
 
 function Weather() {
     const [city, setCity] = useState('Accra');
     const [weatherData, setWeatherData] = useState(null);
-    const [temp, setTemp] = useState('celsius');
+    const [tempUnit, setTempUnit] = useState('celsius');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Memoized temperature conversion
-    const convertTemp = useCallback((unit) => {
-        if (temp === 'fahrenheit') {
-            return ((unit * 9 / 5) + 32).toFixed(1);
-        }
-        return unit.toFixed(1);
-    }, [temp]);
+    const handleInput = (e) => setCity(e.target.value);
 
-    const fetchWeather = async (cityName) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (city.trim()) {
+      fetchWeather(city);
+      setCity("");
+    }
+  };
+
+
+  function convertTemp(unit){
+    if (tempUnit === 'fahrenheit') {
+         return ((unit * 9 / 5) + 32).toFixed(1);
+         }
+      return unit.toFixed(1);
+     }
+
+     const WeatherIcon = ({ condition }) => {
+        switch (condition.toLowerCase()) {
+          case "clear":
+            return <Sun className="weather-icon sun" />;
+          case "rain":
+            return <CloudRain className="weather-icon rain" />;
+          case "clouds":
+            return <Cloud className="weather-icon cloud" />;
+          default:
+            return <Sun className="weather-icon sun" />;
+        }
+      };
+ 
+
+     const fetchWeather = async (cityName) => {
         try {
-            setLoading(true);
-            setError(null);
-
-            const response = await fetch(`${API_URL}?q=${cityName}&appid=${API_KEY}&units=metric`);
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error("City not found. Please check the spelling and try again.");
-                }
-                throw new Error("Failed to fetch weather data. Please try again later.");
-            }
-            const data = await response.json();
-            setWeatherData(data);
+          setLoading(true);
+          setError(null);
+    
+          const response = await fetch(`${API_URL}?q=${cityName}&appid=${API_KEY}&units=metric`);
+          if (!response.ok) throw new Error("Cannot find city...try again");
+    
+          const data = await response.json();
+          setWeatherData(data);
         } catch (error) {
-            setError(error.message);
+          setError(error.message);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
 
-    // Fetch weather on component mount and when city changes
-    useEffect(() => {
-        fetchWeather(city);
-    }, []); // Empty dependency array means this runs once on mount
+    
 
-    const handleInput = (e) => {
-        setCity(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (city.trim()) {
-            fetchWeather(city);
-        }
-    };
-
+  
     return (
         <section className="weather-section">
             <h1>Weather App</h1>
@@ -93,16 +81,16 @@ function Weather() {
 
             <div className="temperature-toggle" role="group" aria-label="Temperature unit selection">
                 <button 
-                    className={`temp-button ${temp === 'celsius' ? 'active' : ''}`}
-                    onClick={() => setTemp("celsius")}
-                    aria-pressed={temp === 'celsius'}
+                    className={`temp-button ${tempUnit === 'celsius' ? 'active' : ''}`}
+                    onClick={() => setTempUnit("celsius")}
+                    aria-pressed={tempUnit === 'celsius'}
                 >
                     °C
                 </button>
                 <button 
-                    className={`temp-button ${temp === 'fahrenheit' ? 'active' : ''}`}
-                    onClick={() => setTemp("fahrenheit")}
-                    aria-pressed={temp === 'fahrenheit'}
+                    className={`temp-button ${tempUnit === 'fahrenheit' ? 'active' : ''}`}
+                    onClick={() => setTempUnit("fahrenheit")}
+                    aria-pressed={tempUnit === 'fahrenheit'}
                 >
                     °F
                 </button>
@@ -128,7 +116,7 @@ function Weather() {
                         <WeatherIcon condition={weatherData.weather[0].main} />
                         <span className="temperature-value">
                             {convertTemp(weatherData.main.temp)}°
-                            {temp === 'celsius' ? 'C' : 'F'}
+                            {tempUnit === 'celsius' ? 'C' : 'F'}
                         </span>
                     </div>
                     <div className='weather-description'>{weatherData.weather[0].description}</div>
@@ -136,7 +124,7 @@ function Weather() {
                         <div className='weather-card'>
                             <Thermometer className='weather-icon' aria-hidden="true" />
                             <p className='weather-label'>Feels Like</p>
-                            <p className='weather-value'>{convertTemp(weatherData.main.feels_like)}°{temp === 'celsius' ? 'C' : 'F'}</p>
+                            <p className='weather-value'>{convertTemp(weatherData.main.feels_like)}°{tempUnit === 'celsius' ? 'C' : 'F'}</p>
                         </div>
                         <div className='weather-card'>
                             <Wind className='weather-icon' aria-hidden="true" />
