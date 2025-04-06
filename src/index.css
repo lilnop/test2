@@ -1,0 +1,113 @@
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f3f4f6;
+}
+h1{
+  font-size: 50px;
+}
+.container{
+  background-color: #fff;
+  padding: 10px;
+}
+section{
+  text-align: center;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  width: 70%;
+  padding: 2rem 1rem;
+  background-color: #fff;
+  margin: auto;
+}
+.weather{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  width: 50%;
+  margin: 50px auto;
+}
+.weather-card {
+  min-width: 20px;
+  max-width: 150px;
+  margin: 15px;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+.weather-icon {
+  width: 2rem;
+  height: 2rem;
+  margin: 0 auto 0.5rem;
+  color: #d62469;
+}
+.weather-description {
+  color: #6b7280;
+  text-transform: capitalize;
+  font-size: 20px;
+}
+.weather-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+.weather-value {
+  font-weight: 600;
+}
+input {
+  margin-bottom: 1.5rem;
+}
+input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus {
+  border-color: #d62469;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+.search-button {
+  background-color: #d62469;
+  color: white;
+  font-weight: 500;
+  margin: 0 5px;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.search-button:hover {
+  background-color: #bd27a4;
+}
+.temp-button{
+  cursor: pointer;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 15px;
+  margin: 1px;
+  font-size: 18px;
+  font-family: inherit;
+}
+.temp-button:focus{
+  background-color: #bd27a4;
+  font-weight: 600;
+  color: #fff;
+  
+  font-weight: 600;
+}
+.temperature {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+.city-name {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.error-message {
+    margin-top: 25px;
+    color: #ef4444;
+  }
+
